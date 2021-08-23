@@ -53,7 +53,7 @@ func main() {
 		%%%%&&%%%%%##(((########(##%,......,,,,,************,,,,,,,........,,,,,,***#%%((/(%%#(((%/(/////((/
 	`
 	fmt.Println(kissing)
-	color.HiCyan("\n\nNike Order Checker | Developed By jc2#9899")
+	color.HiCyan("\n\n						Nike Order Checker | Developed By jc2#9899")
 
 	wg := sync.WaitGroup{}
 
