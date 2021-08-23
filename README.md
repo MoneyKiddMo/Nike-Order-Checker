@@ -1,4 +1,4 @@
-# Nike-Order-Checker
+# Nike Order Checker
 Nike Order Checker - CSV Import / Export
 
 Instructions:
