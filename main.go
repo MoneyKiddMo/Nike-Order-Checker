@@ -82,6 +82,10 @@ func exeCute(Task Task, wg *sync.WaitGroup) {
 	}
 	Task.InitClient(taskProxy)
 	body, err := Task.grabOrder()
-	writeExport(*body)
-
+	if err != nil {
+		color.Red("[ERROR] exeCute.grabOrders ERROR GRABBING ORDER.\n")
+	}
+	if len(body.Group) > 0 {
+		writeExport(*body)
+	}
 }

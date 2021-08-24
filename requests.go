@@ -13,7 +13,6 @@ import (
 )
 
 func (t *Task) InitClient(proxy *url.URL) { // Initializes HTTP Client and Cookiejar for each Task.
-
 	defer handleError() // defers the handleError() function in case of a panic
 
 	jar, err := cookiejar.New(nil) // initializing new cookieJar for task
@@ -29,6 +28,7 @@ func (t *Task) InitClient(proxy *url.URL) { // Initializes HTTP Client and Cooki
 }
 
 func (t *Task) grabOrder() (*Orderinfo, error) {
+	defer handleError()
 	var body Orderinfo
 	url := fmt.Sprintf("https://api.nike.com/orders/summary/v1/%s?locale=en_ca&country=CA&language=en-GB&email=%s", t.Orderid, t.Email)
 	visitorId, _ := uuid.NewV4().MarshalText()
@@ -72,11 +72,13 @@ func (t *Task) grabOrder() (*Orderinfo, error) {
 		color.HiCyan("[200] [%s] Successfully Grabbed Order Info.", t.Orderid)
 		json.Unmarshal([]byte(jsonBody), &body)
 	case 403:
-		color.Red("[403] FORBIDDEN")
+		color.Red("[403] FORBIDDEN\n")
+	case 404:
+		color.Red("[404] Order Not Found.\n")
 	case 500, 502, 503, 504:
-		color.Blue("[%d] Server Error", res.StatusCode)
+		color.Blue("[%d] Server Error\n", res.StatusCode)
 	default:
-		color.Red("[%d] Unknown Response Received. Refer to Status Code for more information.", res.StatusCode)
+		color.Red("[%d] Unknown Response Received. Refer to Status Code for more information.\n", res.StatusCode)
 	}
 	return &body, nil
 }
