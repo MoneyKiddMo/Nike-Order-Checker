@@ -68,5 +68,4 @@ func writeExport(o *Orderinfo) {
 	defer file.Close()
 
 	fmt.Fprintf(file, "\n"+itemName+","+itemSize+","+itemSku+","+orderStatus+","+trackingLink+","+fullName+","+orderId+","+eMail+","+addressOne+","+addressTwo+","+city+","+postalCode)
-	fmt.Println("Wrote Order Data to CSV")
 }

@@ -71,6 +71,8 @@ func main() {
 		go exeCute(task, &wg)
 	}
 	wg.Wait()
+	color.Green("[SUCCESS] All Operations Complete. Closing in 3s...")
+	time.Sleep(time.Second * 3)
 }
 
 func exeCute(Task Task, wg *sync.WaitGroup) {
@@ -88,4 +90,5 @@ func exeCute(Task Task, wg *sync.WaitGroup) {
 	if len(body.Group) > 0 {
 		writeExport(body)
 	}
+	wg.Done()
 }
