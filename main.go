@@ -86,6 +86,6 @@ func exeCute(Task Task, wg *sync.WaitGroup) {
 		color.Red("[ERROR] exeCute.grabOrders ERROR GRABBING ORDER.\n")
 	}
 	if len(body.Group) > 0 {
-		writeExport(*body)
+		writeExport(body)
 	}
 }

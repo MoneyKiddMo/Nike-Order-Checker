@@ -47,7 +47,7 @@ func ReadCsv() ([]Task, error) {
 	return tasks, nil
 }
 
-func writeExport(o Orderinfo) {
+func writeExport(o *Orderinfo) {
 	itemName := o.Group[0].Orderitems[0].Product.Title
 	itemSize := o.Group[0].Orderitems[0].Product.Size
 	itemSku := o.Group[0].Orderitems[0].Product.Stylecolor
