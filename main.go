@@ -67,6 +67,13 @@ func main() {
 		os.Exit(0)
 	}
 
+	config, err := readConfig()
+	if err != nil {
+		color.Red("[ERR] Fatal Error Reading Config :%s, Closing Program.\n", err)
+		time.Sleep(time.Second * 3)
+		os.Exit(0)
+	}
+
 	Import()
 
 	for _, task := range tasks {
@@ -74,6 +81,11 @@ func main() {
 		go exeCute(task, &wg)
 	}
 	wg.Wait()
+
+	if config.Webhookcfg.Webhookenabled {
+		sendWebhook(config.Webhookcfg.Webhookurl, errInt, successInt)
+	}
+
 	color.Green("[SUCCESS] All Operations Complete. Closing in 3s...")
 	color.HiCyan("[STATS] Total Success: %d\n", successInt)
 	color.Red("[STATS] Total Errors: %d\n", errInt)
@@ -82,31 +94,28 @@ func main() {
 
 func exeCute(Task Task, wg *sync.WaitGroup) {
 
-	taskProxy, err := Get()
-	if err != nil {
-		color.Red("[ERR] Fatal Error Grabbing Proxies: %s, Closing Program.\n", err)
-		time.Sleep(time.Second * 3)
-		os.Exit(0)
-	}
-
 	for {
+		taskProxy, err := Get()
+		if err != nil {
+			color.Red("[ERR] Fatal Error Grabbing Proxies: %s, Closing Program.\n", err)
+			time.Sleep(time.Second * 3)
+			os.Exit(0)
+		}
+
 		Task.InitClient(taskProxy)
 		body, err := Task.grabOrder()
 		if err != nil {
 			color.Red("[ERROR] exeCute.grabOrders ERROR GRABBING ORDER.\n")
 			errInt++
-			handleError()
 			break
 		}
 
-		if len(body.Group) > 0 {
-			writeExport(body)
-		}
-
 		if err == nil {
+			writeExport(body)
 			successInt++
 			break
 		}
 	}
 	wg.Done()
+
 }

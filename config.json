@@ -1,0 +1,6 @@
+{
+	"webhook": {
+		"webhookEnabled": true,
+		"webhookUrl": "discordwebhookhere"
+	}
+}

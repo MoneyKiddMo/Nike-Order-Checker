@@ -71,3 +71,11 @@ type Recipient struct {
 	Firstname string `json:"firstName"`
 	Lastname  string `json:"lastName"`
 }
+
+type Config struct {
+	Webhookcfg Webhookcfg `json:"webhook"`
+}
+type Webhookcfg struct {
+	Webhookenabled bool   `json:"webhookEnabled"`
+	Webhookurl     string `json:"webhookUrl"`
+}

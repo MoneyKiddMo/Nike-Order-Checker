@@ -9,6 +9,7 @@ import (
 	"net/url"
 
 	"github.com/fatih/color"
+	"github.com/pkg/errors"
 	uuid "github.com/satori/go.uuid"
 )
 
@@ -71,16 +72,25 @@ func (t *Task) grabOrder() (*Orderinfo, error) {
 
 		color.HiCyan("[200] [%s] Successfully Grabbed Order Info.", t.Orderid)
 		json.Unmarshal([]byte(jsonBody), &body)
+		return &body, nil
 	case 403:
 		color.Red("[403] FORBIDDEN\n")
+		err := errors.New("[403] FORBIDDEN - get better proxies")
+		return nil, err
 	case 404:
 		color.Red("[404] Order Not Found.\n")
+		err := errors.New("[404] Order Not Found.")
+		return nil, err
+
 	case 500, 502, 503, 504:
 		color.Blue("[%d] Server Error\n", res.StatusCode)
+		err := errors.New("Server Error\n")
+		return nil, err
 	default:
 		color.Red("[%d] Unknown Response Received. Refer to Status Code for more information.\n", res.StatusCode)
+		err := errors.New("Unknown Response Received. Refer to Status Code for more information.")
+		return nil, err
 	}
-	return &body, nil
 }
 
 func handleError() {
