@@ -48,6 +48,7 @@ func ReadCsv() ([]Task, error) {
 }
 
 func writeExport(o *Orderinfo) {
+	defer handleError()
 	itemName := o.Group[0].Orderitems[0].Product.Title
 	itemSize := o.Group[0].Orderitems[0].Product.Size
 	itemSku := o.Group[0].Orderitems[0].Product.Stylecolor
