@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/gocarina/gocsv"
+	"github.com/pkg/errors"
 )
 
 type Task struct {
@@ -35,6 +36,8 @@ func ReadCsv() ([]Task, error) {
 	file, err := os.OpenFile("orders.csv", os.O_RDWR|os.O_CREATE, os.ModePerm)
 	if err != nil {
 		log.Fatalf("Fatal Error Opening CSV: %s", err)
+		err := errors.New("Fatal CSV Error")
+		return nil, err
 	}
 	defer file.Close()
 
@@ -42,12 +45,13 @@ func ReadCsv() ([]Task, error) {
 
 	if err := gocsv.UnmarshalFile(file, &tasks); err != nil {
 		log.Fatalf("Fatal Error Unmarshalling CSV: %s", err)
+		err := errors.New("Fatal Error Unmarshalling CSV")
+		return nil, err
 	}
-
 	return tasks, nil
 }
 
-func writeExport(o *Orderinfo) {
+func writeExport(o *Orderinfo) error {
 	defer handleError()
 	itemName := o.Group[0].Orderitems[0].Product.Title
 	itemSize := o.Group[0].Orderitems[0].Product.Size
@@ -65,8 +69,11 @@ func writeExport(o *Orderinfo) {
 	file, err := os.OpenFile("results.csv", os.O_APPEND|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Fatalf("Fatal Error: %s", err)
+		err := errors.New("Error Writing Results File")
+		return err
 	}
 	defer file.Close()
 
 	fmt.Fprintf(file, "\n"+itemName+","+itemSize+","+itemSku+","+orderStatus+","+trackingLink+","+fullName+","+orderId+","+eMail+","+addressOne+","+addressTwo+","+city+","+postalCode)
+	return nil
 }

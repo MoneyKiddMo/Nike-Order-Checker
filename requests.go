@@ -51,6 +51,7 @@ func (t *Task) grabOrder() (*Orderinfo, error) {
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		color.Red("[ERROR] grabOrder.NewRequest Error Initializing Request: %s\n", err)
+		err := errors.New("Error Init Request")
 		return nil, err
 	}
 	req.Header = headers
@@ -58,6 +59,7 @@ func (t *Task) grabOrder() (*Orderinfo, error) {
 	res, err := t.Client.Do(req)
 	if err != nil {
 		color.Red("[ERROR] grabOrder.Client.Do Error Sending Request: %s\n", err)
+		err := errors.New("Error Sending Request")
 		return nil, err
 	}
 	defer res.Body.Close()
@@ -67,6 +69,7 @@ func (t *Task) grabOrder() (*Orderinfo, error) {
 		jsonBody, err := io.ReadAll(res.Body)
 		if err != nil {
 			color.Red("[ERROR] grabOrder.ReadAll Error Reading Response Body: %s\n", err)
+			err := errors.New("Error Reading Response Body")
 			return nil, err
 		}
 
